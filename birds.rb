@@ -60,10 +60,6 @@ class Bird
       puts "-----------------------------------------------"
       puts "#{@name} wants eat!  (#{@energy}%)" if hungry?
       puts "#{@name} eats a lot and becomes a fatty, so can not fly  (#{@energy}%)" if overfed?
-     # puts "#{@name} скучает.  (#{@mood}%)" if bored?
-     # puts "#{@name} хочет спать.  (#{@cheerfulness}%)" if sleepy?
-      #puts "#{@name} плохо себя чуствует!  (#{@health}%)" if healthy?
-      #puts "#{@name} воняет!  (#{@cleaness}%)" if clean?
       puts "-----------------------------------------------"
 
       else
