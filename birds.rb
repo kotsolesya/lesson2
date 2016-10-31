@@ -2,35 +2,21 @@ require 'date'
 require 'timers'
 
 class Bird
-  attr_accessor :name, :type
+  attr_accessor :name
 
   def initialize
     @name = nil
-    @type = 1
     @health = 100
     @birthday = nil
     @energy = 100 # golod == 0
     @angry = 1
     @live = false
-    @birds_type = ['Red Bird', 'Blue Birds',
-                   'Yellow Bird ', 'Black Bird ',
-                   'White Bird', 'Boomerang Bird',
-                   'Big Brother Bird', 'Orange Bird',
-                   'Pink Bird', 'Grey Bird']
   end
 
-  def main_work
+  def make_choise
     puts 'Please, select your choice'
-    case gets.to_i
-    when 1 then bird_born
-    when 2 then show_bird_status if alive?
-    when 3 then bird_age if alive?
-    when 4 then feed if alive?
-    when 5 then fly if alive?
-    when 6 then needs if alive?
-    when 0 then exit
-    else puts "I don't know what to do"
-    end
+    i = gets.to_i
+    i
   end
 
   def help
@@ -42,7 +28,7 @@ class Bird
     puts '4 - feed your bird'
     puts '5 - let the bird flight'
     puts '6 - needs'
-    puts "0 - exit"
+    puts '0 - exit'
   end
 
   def bird_born
@@ -51,10 +37,7 @@ class Bird
     else
       puts "Bird's name:"
       @name = gets.chomp
-      puts "Bird's type (number):"
-      t = gets
-      @type = t.to_i
-      @birthday = Time.now.hour
+      @birthday = Time.now.sec
       @live = true
       timer(5)
       puts "\nBird #{@name} just born"
@@ -62,24 +45,29 @@ class Bird
   end
 
   def bird_age
-    puts Time.now.hour - @birthday
+    if alive?
+      (Time.now.sec - @birthday).abs
+    else 0
+    end
   end
 
   def show_bird_status
+    return unless alive?
     puts "Bird's name #{@name}"
-    puts "Bird's type #{@birds_type[@type]}"
     puts "Bird's health #{@health}"
-    puts "Bird's birthday #{bird_age.to_i}"
+    puts "Bird's birthday #{bird_age}"
     puts "Bird's energy #{@energy}"
     puts "Bird's angry #{@angry}"
   end
 
   def needs
-    puts "#{@name} wants eat!  (#{@energy}%)" if hungry?
-    puts "#{@name} eats a lot and becomes a fatty, so can not fly  (#{@energy}%)" if overfed?
+    return unless alive?
+    puts "#{@name} wants eat!  (#{@energy}%)" if hungry? && alive?
+    puts "#{@name} eats a lot, so can not fly  (#{@energy}%)" if overfed?
   end
 
   def feed
+    return unless alive?
     if overfed?
       puts "#{@name} can not eat anymore, it is fat;)"
     else
@@ -91,6 +79,7 @@ class Bird
   end
 
   def fly # fly to expend energy
+    return unless alive?
     if hungry?
       puts "#{@name} can not fly, it is hungry;("
     else
@@ -130,5 +119,15 @@ end
 b = Bird.new
 b.help
 loop do
-  b.main_work
+  case b.make_choise
+  when 1 then b.bird_born
+  when 2 then b.show_bird_status
+  when 3 then puts b.bird_age
+  when 4 then b.feed
+  when 5 then b.fly
+  when 6 then b.needs
+  when 0 then exit
+  else
+    puts "I don't know what to do"
+  end
 end
